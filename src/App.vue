@@ -1,21 +1,20 @@
-<template>
-  <headerComponent/>
-      <RouterView />
-  <footerComponent/>
-</template>
+<script setup>
+import { Nav, Alert } from '@/components';
+import { useAuthStore } from '@/stores';
 
-<script lang="ts">
-import footerComponent from './components/footerComponent.vue';
-import headerComponent from './components/headerComponent.vue';
-export default{
-  components:{
-    headerComponent,
-    footerComponent
-  }
-    
-  }
+const authStore = useAuthStore();
 </script>
 
-<style lang="css">
+<template>
+    <div class="app-container" :class="authStore.user && 'bg-light'">
+        <Nav />
+        <Alert />
+        <div class="container pt-4 pb-4">
+            <router-view />
+        </div>
+    </div>
+</template>
 
+<style>
+@import '@/assets/base.css';
 </style>
