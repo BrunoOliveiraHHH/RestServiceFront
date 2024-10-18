@@ -9,10 +9,16 @@ export const useNpcStore = defineStore({
   state: () => ({
     npcs: {},
     npc: {},
+    retorno: {},
   }),
   actions: {
     async register(npc) {
-      await fetchWrapper.post(`${baseUrl}/salvar`, npc);
+      this.retorno = false;
+      try {
+        this.retorno = await fetchWrapper.post(`${baseUrl}/salvar`, npc);
+      } catch (error) {
+        this.retorno = { error };
+      }
     },
     async getAll() {
       this.npcs = { loading: true };
@@ -35,6 +41,7 @@ export const useNpcStore = defineStore({
     },
     async delete(id) {
       await fetchWrapper.get(`${baseUrl}/excluir/${id}`);
+      this.npcs = this.npcs.filter((x) => x.id !== id);
     },
   },
 });

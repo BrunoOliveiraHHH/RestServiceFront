@@ -6,15 +6,15 @@ import { useUsersStore, useAlertStore } from '@/stores';
 import { router } from '@/router';
 
 const schema = Yup.object().shape({
-    firstName: Yup.string()
-        .required('First Name is required'),
-    lastName: Yup.string()
-        .required('Last Name is required'),
-    username: Yup.string()
-        .required('Username is required'),
-    password: Yup.string()
-        .required('Password is required')
-        .min(6, 'Password must be at least 6 characters')
+    nome: Yup.string()
+        .required('Nome é campo obrigatório'),
+    email: Yup.string()
+        .required('Email é campo obrigatório'),
+    login: Yup.string()
+        .required('Login é campo obrigatório'),
+    senha: Yup.string()
+        .required('Senha é campo obrigatório'),
+    anoNascimento: Yup.string().required('Ano de Nascimento é campo obrigatório')
 });
 
 async function onSubmit(values) {
@@ -23,7 +23,7 @@ async function onSubmit(values) {
     try {
         await usersStore.register(values);
         await router.push('/account/login');
-        alertStore.success('Registration successful');
+        alertStore.success('Registro realizado com sucesso!');
     } catch (error) { 
         alertStore.error(error);
     }
@@ -32,35 +32,40 @@ async function onSubmit(values) {
 
 <template>
     <div class="card m-3">
-        <h4 class="card-header">Register</h4>
+        <h4 class="card-header">Registro de Usuário</h4>
         <div class="card-body">
             <Form @submit="onSubmit" :validation-schema="schema" v-slot="{ errors, isSubmitting }">
                 <div class="form-group">
-                    <label>First Name</label>
-                    <Field name="firstName" type="text" class="form-control" :class="{ 'is-invalid': errors.firstName }" />
-                    <div class="invalid-feedback">{{ errors.firstName }}</div>
+                    <label>Nome</label>
+                    <Field name="nome" type="text" class="form-control" :class="{ 'is-invalid': errors.nome }" />
+                    <div class="invalid-feedback">{{ errors.nome }}</div>
                 </div>
                 <div class="form-group">
-                    <label>Last Name</label>
-                    <Field name="lastName" type="text" class="form-control" :class="{ 'is-invalid': errors.lastName }" />
-                    <div class="invalid-feedback">{{ errors.lastName }}</div>
+                    <label>Email</label>
+                    <Field name="email" type="text" class="form-control" :class="{ 'is-invalid': errors.email }" />
+                    <div class="invalid-feedback">{{ errors.email }}</div>
                 </div>
                 <div class="form-group">
-                    <label>Username</label>
-                    <Field name="username" type="text" class="form-control" :class="{ 'is-invalid': errors.username }" />
-                    <div class="invalid-feedback">{{ errors.username }}</div>
+                    <label>Ano de Nascimento</label>
+                    <Field name="anoNascimento" type="text" class="form-control" :class="{ 'is-invalid': errors.anoNascimento }" />
+                    <div class="invalid-feedback">{{ errors.anoNascimento }}</div>
                 </div>
                 <div class="form-group">
-                    <label>Password</label>
-                    <Field name="password" type="password" class="form-control" :class="{ 'is-invalid': errors.password }" />
-                    <div class="invalid-feedback">{{ errors.password }}</div>
+                    <label>Login</label>
+                    <Field name="login" type="text" class="form-control" :class="{ 'is-invalid': errors.login }" />
+                    <div class="invalid-feedback">{{ errors.login }}</div>
+                </div>
+                <div class="form-group">
+                    <label>Senha</label>
+                    <Field name="senha" type="password" class="form-control" :class="{ 'is-invalid': errors.senha }" />
+                    <div class="invalid-feedback">{{ errors.senha }}</div>
                 </div>
                 <div class="form-group">
                     <button class="btn btn-primary" :disabled="isSubmitting">
                         <span v-show="isSubmitting" class="spinner-border spinner-border-sm mr-1"></span>
-                        Register
+                        Registrar
                     </button>
-                    <router-link to="login" class="btn btn-link">Cancel</router-link>
+                    <router-link to="login" class="btn btn-link">Cancelar</router-link>
                 </div>
             </Form>
         </div>

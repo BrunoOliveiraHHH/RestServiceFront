@@ -17,11 +17,12 @@ console.log(npcs);
     <table class="table table-striped">
         <thead>
             <tr>
-                <th style="width: 20%;">ID</th>
+                <th style="width: 5%;">ID</th>
                 <th style="width: 20%">Nome</th>
                 <th style="width: 20%">Idade</th>
-                <th style="width: 20%">Raca</th>
+                <th style="width: 20%">Raça</th>
                 <th style="width: 20%;">Classe</th>
+                <th style="width: 15%;">Ações</th>
             </tr>
         </thead>
         <tbody>
@@ -31,6 +32,14 @@ console.log(npcs);
                 <td>{{ npc.idade }}</td>
                 <td>{{ npc.raca }}</td>
                 <td>{{ npc.classe }}</td>
+                <td style="white-space: nowrap">
+                    <router-link :to="`/npcs/edit/${npc.id}`" class="btn btn-sm btn-primary mr-1">Edit</router-link>
+                    <button @click="npcStore.delete(npc.id)" class="btn btn-sm btn-danger btn-delete-user"
+                        :disabled="npc.isDeleting">
+                        <span v-if="npc.isDeleting" class="spinner-border spinner-border-sm"></span>
+                        <span v-else>Delete</span>
+                    </button>
+                </td>
             </tr>
         </tbody>
     </table>

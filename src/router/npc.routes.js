@@ -6,5 +6,6 @@ export default {
   children: [
     { path: "", component: Listar },
     { path: "add", component: Adicionar },
+    { path: 'edit/:id', component: Adicionar }
   ],
 };

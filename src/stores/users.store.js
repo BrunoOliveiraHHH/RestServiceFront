@@ -3,7 +3,7 @@ import { defineStore } from 'pinia';
 import { fetchWrapper } from '@/helpers';
 import { useAuthStore } from '@/stores';
 
-const baseUrl = `${import.meta.env.VITE_API_URL}/users`;
+const baseUrl = `${import.meta.env.VITE_API_URL}/usuario`;
 
 export const useUsersStore = defineStore({
     id: 'users',
@@ -13,26 +13,49 @@ export const useUsersStore = defineStore({
     }),
     actions: {
         async register(user) {
-            await fetchWrapper.post(`${baseUrl}/register`, user);
+            var dtoInput = {
+                nome: btoa(user.nome),
+                email: btoa(user.email),
+                anoNascimento: btoa(user.anoNascimento),
+                login: btoa(user.login),
+                senha: btoa(user.senha)
+            }
+            await fetchWrapper.post(`${baseUrl}/salvar`, dtoInput);
         },
         async getAll() {
             this.users = { loading: true };
             try {
-                this.users = await fetchWrapper.get(baseUrl);    
+                this.users = await fetchWrapper.get(`${baseUrl}/consultar`);    
             } catch (error) {
                 this.users = { error };
+            }
+        },
+        async getByLogin(login) {
+            this.user = { loading: true };
+            try {
+                this.user = await fetchWrapper.get(`${baseUrl}/consultarPorLogin/${login}`);
+            } catch (error) {
+                this.user = { error };
             }
         },
         async getById(id) {
             this.user = { loading: true };
             try {
-                this.user = await fetchWrapper.get(`${baseUrl}/${id}`);
+                this.user = await fetchWrapper.get(`${baseUrl}/consultar/${id}`);
             } catch (error) {
                 this.user = { error };
             }
         },
         async update(id, params) {
-            await fetchWrapper.put(`${baseUrl}/${id}`, params);
+            var dtoInput = {
+                id: params.id,
+                nome: btoa(params.nome),
+                email: btoa(params.email),
+                anoNascimento: btoa(params.anoNascimento),
+                login: btoa(params.login),
+                senha: btoa(params.senha)
+            }
+            await fetchWrapper.put(`${baseUrl}/alterar`, dtoInput);
 
             // update stored user if the logged in user updated their own record
             const authStore = useAuthStore();
@@ -49,7 +72,7 @@ export const useUsersStore = defineStore({
             // add isDeleting prop to user being deleted
             this.users.find(x => x.id === id).isDeleting = true;
 
-            await fetchWrapper.delete(`${baseUrl}/${id}`);
+            await fetchWrapper.get(`${baseUrl}/excluir/${id}`);
 
             // remove user from list after deleted
             this.users = this.users.filter(x => x.id !== id);
