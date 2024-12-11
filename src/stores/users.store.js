@@ -14,11 +14,11 @@ export const useUsersStore = defineStore({
     actions: {
         async register(user) {
             var dtoInput = {
-                nome: btoa(user.nome),
-                email: btoa(user.email),
-                anoNascimento: btoa(user.anoNascimento),
-                login: btoa(user.login),
-                senha: btoa(user.senha)
+                nome: user.nome,
+                email: user.email,
+                anoNascimento: user.anoNascimento,
+                login: user.login,
+                senha: user.senha
             }
             await fetchWrapper.post(`${baseUrl}/salvar`, dtoInput);
         },
@@ -49,11 +49,11 @@ export const useUsersStore = defineStore({
         async update(id, params) {
             var dtoInput = {
                 id: params.id,
-                nome: btoa(params.nome),
-                email: btoa(params.email),
-                anoNascimento: btoa(params.anoNascimento),
-                login: btoa(params.login),
-                senha: btoa(params.senha)
+                nome: params.nome,
+                email: params.email,
+                anoNascimento: params.anoNascimento,
+                login: params.login,
+                senha: params.senha
             }
             await fetchWrapper.put(`${baseUrl}/alterar`, dtoInput);
 

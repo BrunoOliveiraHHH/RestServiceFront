@@ -5,10 +5,9 @@ import { useNpcStore } from '../../stores/npc.store';
 
 const npcStore = useNpcStore();
 npcStore.getAll();
-
+const user = JSON.parse(localStorage.getItem("user"));
 const { npcs } = storeToRefs(npcStore);
 
-console.log(npcs);
 </script>
 
 <template>
@@ -34,7 +33,7 @@ console.log(npcs);
                 <td>{{ npc.classe }}</td>
                 <td style="white-space: nowrap">
                     <router-link :to="`/npcs/edit/${npc.id}`" class="btn btn-sm btn-primary mr-1">Edit</router-link>
-                    <button @click="npcStore.delete(npc.id)" class="btn btn-sm btn-danger btn-delete-user"
+                    <button @click="npcStore.delete(npc.id,user.login)" class="btn btn-sm btn-danger btn-delete-user"
                         :disabled="npc.isDeleting">
                         <span v-if="npc.isDeleting" class="spinner-border spinner-border-sm"></span>
                         <span v-else>Delete</span>

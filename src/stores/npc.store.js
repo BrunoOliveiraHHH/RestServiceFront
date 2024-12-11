@@ -39,8 +39,8 @@ export const useNpcStore = defineStore({
     async update(id, params) {
       await fetchWrapper.put(`${baseUrl}/alterar/${id}`, params);
     },
-    async delete(id) {
-      await fetchWrapper.get(`${baseUrl}/excluir/${id}`);
+    async delete(id, user) {
+      await fetchWrapper.get(`${baseUrl}/excluir/${id},${user}`);
       this.npcs = this.npcs.filter((x) => x.id !== id);
     },
   },

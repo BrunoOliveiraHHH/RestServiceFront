@@ -31,6 +31,8 @@ const schema = Yup.object().shape({
 async function onSubmit(values) {
     try {
         let message;
+        const user = JSON.parse(localStorage.getItem("user"));
+        values.usuario = user.login;
         if (npc) {
             await npcStore.update(npc.value.id, values)
             message = 'Npc alterado com sucesso!';

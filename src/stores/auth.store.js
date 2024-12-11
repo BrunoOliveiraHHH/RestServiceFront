@@ -17,8 +17,8 @@ export const useAuthStore = defineStore({
     async login(username, password) {
       try {
         var dtoInput = {
-          login: btoa(username),
-          senha: btoa(password),
+          login: username,
+          senha: password,
         };
         const user = await fetchWrapper.post(`${baseUrl}/autenticar`, dtoInput);
         const alertStore = useAlertStore();
@@ -31,18 +31,66 @@ export const useAuthStore = defineStore({
         if (user) {
           // redirect to previous url or default to home page
           router.push(this.returnUrl || "/");
-        }else{
-            alertStore.error('Login ou Senha incorreta, favor verificar e tentar novamente!');
+        } else {
+          const alertStore = useAlertStore();
+          alertStore.error(
+            "Login ou Senha incorreta, favor verificar e tentar novamente!"
+          );
+        }
+      } catch (error) {
+        
+        useAlertStore.error(error);
+      }
+    },
+    async logout(username, password) {
+      try {
+        var dtoInput = {
+          login: username,
+          senha: password,
+        };
+        const user = await fetchWrapper.post(
+          `${baseUrl}/encerra-sessao`,
+          dtoInput
+        );
+        const alertStore = useAlertStore();
+        if (user) {
+          this.user = null;
+          localStorage.removeItem("user");
+          router.push("/account/login");
+        } else {
+          alertStore.error("Erro ao desconectar, favor tentar novamente!");
         }
       } catch (error) {
         const alertStore = useAlertStore();
         alertStore.error(error);
       }
     },
-    logout() {
-      this.user = null;
-      localStorage.removeItem("user");
-      router.push("/account/login");
+    async sessaoAtiva(username, password) {
+      try {
+        var dtoInput = {
+          login: username,
+          senha: password,
+        };
+        const user = await fetchWrapper.post(`${baseUrl}/autenticar`, dtoInput);
+        const alertStore = useAlertStore();
+        // update pinia state
+        this.user = user;
+
+        // store user details and jwt in local storage to keep user logged in between page refreshes
+        localStorage.setItem("user", JSON.stringify(user));
+
+        if (user) {
+          // redirect to previous url or default to home page
+          router.push(this.returnUrl || "/");
+        } else {
+          alertStore.error(
+            "Erro ao manter sessão, favor fazer o login novamente."
+          );
+        }
+      } catch (error) {
+        const alertStore = useAlertStore();
+        alertStore.error(error);
+      }
     },
   },
 });
